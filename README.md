@@ -34,6 +34,21 @@ To create a chat bot we have 2 approaches:
 - Possible collision among similar snippets during the retrieval process
 - RAG has larger input size due to inclusion of context information ,output information tends to be more verbose and harder to steer.
 
+### Experiment Conclusion
+
+GPT learned 47% of new knowledge with fine-tuning with RAG this number goes upto 72% and 74%.
+
+## Preferred approach
+### What we want?
+- Fast Deployment option
+
+### Choice of Approach
+
+RAG allows to create embeddings easily and allows for a fast deployment option.
+
+## Architecture
+
+![Architecture](./img/AI_copilot_service.drawio.png)
 ## References
 
 - https://arxiv.org/pdf/2401.08406
