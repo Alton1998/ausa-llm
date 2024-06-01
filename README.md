@@ -18,7 +18,7 @@ To create a chat bot we have 2 approaches:
 - Fine tuning existing foundational models on medical data set
 - Create a Retrieval augmented generation framework which is used for retrieving facts from an external knowledge
 
-![Comparisons](./img/Screenshot%202024-05-31%20122720.pnggit )
+![Comparisons](./img/Screenshot%202024-05-31%20122720.png)
 
 ### Fine tuning existing foundation models on medical data set 
 
