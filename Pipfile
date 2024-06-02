@@ -1,0 +1,27 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+langchain = "*"
+openai = "*"
+python-dotenv = "*"
+pypdf = "*"
+pymongo = "*"
+langchain-openai = "*"
+tiktoken = "*"
+langchain-community = "*"
+gpt4all = "*"
+sentence-transformers = "*"
+more-itertools = "*"
+
+[dev-packages]
+black = "*"
+flake8 = "*"
+bandit = "*"
+pre-commit = "*"
+
+[requires]
+python_version = "3.12"
+python_full_version = "3.12.3"

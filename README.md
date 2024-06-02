@@ -20,12 +20,12 @@ To create a chat bot we have 2 approaches:
 
 ![Comparisons](./img/Screenshot%202024-05-31%20122720.png)
 
-### Fine tuning existing foundation models on medical data set 
+### Fine tuning existing foundation models on medical data set
 
 - Incorporates the additional knowledge into the model itself
 - Offers a precise, succinct output that is attuned to brevity.
 - High initial cost
-- Minimum input size 
+- Minimum input size
 
 ### Retrieval Augmented Generation
 
@@ -49,6 +49,10 @@ RAG allows to create embeddings easily and allows for a fast deployment option.
 ## Architecture
 
 ![Architecture](./img/AI_copilot_service.drawio.png)
+
+## Steps
+### Creating a MongoDB cluster
+Go to the [MongoDB Atlas]()
 ## References
 
 - https://arxiv.org/pdf/2401.08406
