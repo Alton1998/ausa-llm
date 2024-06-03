@@ -6,7 +6,6 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import MongoDBAtlasVectorSearch
-from langchain_core.callbacks import CallbackManager, StreamingStdOutCallbackHandler
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables import RunnablePassthrough, RunnablePick
@@ -54,27 +53,29 @@ vector_search = MongoDBAtlasVectorSearch.from_connection_string(
 )
 
 rag_prompt = PromptTemplate.from_template(
-    "You are an assistant for medical question-answering tasks. Use the following "
-    "pieces of retrieved context to answer the question. If you don't know the "
-    "answer, just say that you don't know. Use three sentences maximum and keep "
-    "the answer concise for upto 50 words. Question: {question} \nContext: {context}"
+    "You are an expert and experienced from the healthcare and biomedical domain with extensive medical "
+    "knowledge and practical experience. Your name is Stephen, and you were developed by AUSA. You are"
+    "willing to help answer the user's query with explanation. In your explanation, leverage your deep "
+    "medical expertise such as relevant anatomical structures, physiological processes, diagnostic "
+    "criteria, treatment guidelines, or other pertinent medical concepts. Use precise medical terminology "
+    "while still aiming to make the explanation clear and accessible to a general audience. If you think "
+    "its necessary use the following context as well to answer the questions:{context}. If you don't know anything "
+    "just say I don't know."
+    "Also end your answer with a caution message saying that your answers may not be fully accurate"
+    "Medical Question: {question} Medical Answer:"
 )
 
 
 def format_docs(docs):
-    return "\n\n".join(doc.page_content for doc in docs)
+    return " ".join(doc.page_content for doc in docs)
 
-
-# Callbacks support token-wise streaming
-callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
 
 llm = LlamaCpp(
     model_path=LLM_MODEL_PATH,
     temperature=LLM_MODEL_TEMPERATURE,
     max_tokens=LLM_MODEL_MAX_TOKENS,
     top_p=LLM_MODEL_TOP_P,
-    callback_manager=callback_manager,
-    verbose=True,
+    n_ctx=2048,
 )
 
 chain = (
@@ -160,7 +161,7 @@ async def llm_websocket(websocket: WebSocket, client_id: int):
             logging.debug(f"Client:{client_id} asked: {question}")
             docs = vector_search.similarity_search(question)
             logging.debug(f"Documents Found:{len(docs)}")
-            response = chain.invoke({"context": docs, "question": question})
+            response = chain.invoke({"question": question, "context": docs})
             await llm_connection_manager.send_personal_message(response, websocket)
     except WebSocketDisconnect:
         await llm_connection_manager.disconnect(websocket)
