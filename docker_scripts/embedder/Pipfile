@@ -11,9 +11,6 @@ pymongo = "*"
 tiktoken = "*"
 langchain-community = "*"
 sentence-transformers = "*"
-fastapi = "*"
-llama-cpp-python = "*"
-websockets = "*"
 
 [dev-packages]
 black = "*"

@@ -52,7 +52,22 @@ RAG allows to create embeddings easily and allows for a fast deployment option.
 
 ## Steps
 ### Creating a MongoDB cluster
-Go to the [MongoDB Atlas]()
+1. Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register)
+2. Create an Account
+3. Create a Cluster as follows
+
+![Cluster](./img/img.png)
+4. Choose the following option:
+![Choice](./img/img_1.png)
+
+### Upload your documents to the Cluster
+
+# Docker Build Commands
+## Embedder
+```
+docker build -f docker_scripts/embedder/Dockerfile -t document_embedder:latest .
+```
+## LLM
 ## References
 
 - https://arxiv.org/pdf/2401.08406

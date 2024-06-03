@@ -32,7 +32,7 @@ logging.basicConfig(
 client = MongoClient(os.getenv("MONGODB_ATLAS_CLUSTER_URI"))
 db = client[os.getenv("MONGODB_NAME")]
 MONGODB_COLLECTION = db[os.getenv("MONGODB_COLLECTION_NAME")]
-ATLAS_VECTOR_SEARCH_INDEX_NAME = os.getenv("", "medical_info_index")
+ATLAS_VECTOR_SEARCH_INDEX_NAME = os.getenv("VECTOR_SEARCH_INDEX", "medical_info_index")
 
 data = []
 DIR = os.getenv("KNOWLEDGE_DIR", "./medical_training_docs")
