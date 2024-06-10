@@ -1,5 +1,6 @@
 import logging
 import os
+import pickle
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
@@ -43,7 +44,11 @@ LLM_MODEL_PATH = os.getenv("LLM_MODEL_PATH", "openbiollm-llama3-8b.Q5_K_M.gguf")
 LLM_MODEL_MAX_TOKENS = int(os.getenv("LLM_MODEL_MAX_TOKENS", 2000))
 LLM_MODEL_TOP_P = float(os.getenv("LLM_MODEL_TOP_P", 1))
 
-embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)
+
+f = open(os.getenv("EMBEDDING_MODEL_PATH","./embedder"),"rb")
+embeddings = pickle.load(f)
+f.close()
+
 
 vector_search = MongoDBAtlasVectorSearch.from_connection_string(
     MONGO_URI,
