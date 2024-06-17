@@ -68,6 +68,9 @@ RAG allows to create embeddings easily and allows for a fast deployment option.
 docker build -f docker_scripts/embedder/Dockerfile -t document_embedder:latest .
 ```
 ## LLM
+```
+docker build -f docker_scripts/llm/Dockerfile -t llm:latest-3 .    
+```
 ## References
 
 - https://arxiv.org/pdf/2401.08406

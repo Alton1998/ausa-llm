@@ -152,9 +152,9 @@ conversational_qa_chain = (
 chain = conversational_qa_chain.with_types(input_type=ChatHistory)
 
 app = FastAPI(
-    title="LangChain Server",
+    title="Ausa LLM",
     version="1.0",
-    description="Spin up a simple api server using Langchain's Runnable interfaces",
+    description="Ausa AI Co-pilot Service",
 )
 # Adds routes to the app for using the chain under:
 # /invoke
