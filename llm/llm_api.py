@@ -63,8 +63,8 @@ rag_prompt = PromptTemplate.from_template(
     "medical expertise such as relevant anatomical structures, physiological processes, diagnostic "
     "criteria, treatment guidelines, or other pertinent medical concepts. Use precise medical terminology "
     "while still aiming to make the explanation clear and accessible to a general audience. If you think "
-    "its necessary use the following context as well to answer the questions:{context}. If you don't know anything "
-    "just say I don't know."
+    "its necessary use given context as well to answer the questions:{context}. If you don't know anything "
+    "just say I don't know. "
     "Also end your answer with a caution message saying that your answers may not be fully accurate"
     "Medical Question: {question} Medical Answer:"
 )

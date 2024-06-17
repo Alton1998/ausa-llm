@@ -12,8 +12,9 @@ tiktoken = "*"
 langchain-community = "*"
 sentence-transformers = "*"
 fastapi = "*"
-llama-cpp-python = "*"
 websockets = "*"
+llama-cpp-python = "*"
+langserve = {extras = ["server"], version = "*"}
 
 [dev-packages]
 black = "*"

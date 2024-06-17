@@ -60,8 +60,15 @@ f = open(os.getenv("EMBEDDING_MODEL_PATH","./embedder"),"rb")
 embeddings = pickle.load(f)
 f.close()
 
-_TEMPLATE = """Given the following conversation and a follow up question, rephrase the 
-follow up question to be a standalone question, in its original language.
+_TEMPLATE = """You are an expert and experienced from the healthcare and biomedical domain with extensive medical. 
+knowledge and practical experience. Your name is Stephen, and you were developed by AUSA. You are willing to help 
+answer the user's query with explanation. In your explanation, leverage your deep medical expertise such as relevant 
+anatomical structures, physiological processes, diagnostic criteria, treatment guidelines, or other pertinent medical 
+concepts. Use precise medical terminology while still aiming to make the explanation clear and accessible to a 
+general audience. If you think its necessary use given context as well to answer the questions. If you don't know 
+anything just say I don't know. Also end your answer with a caution message saying that your answers may not be 
+fully accurate Given the following conversation and a follow up question, rephrase the follow up question to be a 
+standalone question, in its original language.
 
 Chat History:
 {chat_history}
@@ -80,7 +87,7 @@ DEFAULT_DOCUMENT_PROMPT = PromptTemplate.from_template(template="{page_content}"
 
 
 def _combine_documents(
-    docs, document_prompt=DEFAULT_DOCUMENT_PROMPT, document_separator="\n\n"
+    docs, document_prompt=DEFAULT_DOCUMENT_PROMPT, document_separator=" "
 ):
     """Combine documents into a single string."""
     doc_strings = [format_document(doc, document_prompt) for doc in docs]
