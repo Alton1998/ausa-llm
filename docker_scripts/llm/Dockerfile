@@ -5,4 +5,4 @@ COPY ./llm ./llm
 RUN apt-get update && apt-get install build-essential -y
 RUN pip install pipenv
 RUN pipenv install --deploy
-CMD ["pipenv","run","fastapi", "run", "/code/llm/llm_api.py", "--port", "8000"]
+CMD ["pipenv","run","fastapi", "run", "/code/llm/llm_server.py", "--port", "8000"]
