@@ -1,0 +1,21 @@
+services:
+  llm:
+    image: cyberhead1998/llm:buildx-latest-1
+    ports:
+      - "8000:8000"
+    environment:
+      MONGODB_ATLAS_CLUSTER_URI: mongodb+srv://root:1234@cluster0.5klthhi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      MONGODB_NAME: ausa_medical_db
+      MONGODB_COLLECTION_NAME: medical_info
+      KNOWLEDGE_DIR: /code/medical_training_docs
+      CHUNK_SIZE: 500
+      CHUNK_OVERLAP: 20
+      EMBEDDING_MODEL: thenlper/gte-large
+      VECTOR_SEARCH_INDEX: medical_info_index
+      BATCH_SIZE: 5
+      LLM_MODEL_PATH: /code/llm/openbiollm-llama3-8b.Q5_K_M.gguf
+      LLM_MODEL_TEMPERATURE: 0.2
+      LLM_MODEL_TOP_P: 1
+      LLM_MODEL_MAX_TOKENS: 2000
+      LOG_LEVEL: DEBUG
+      EMBEDDING_MODEL_PATH: /code/llm/embedder
