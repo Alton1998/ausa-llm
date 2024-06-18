@@ -67,8 +67,7 @@ anatomical structures, physiological processes, diagnostic criteria, treatment g
 concepts. Use precise medical terminology while still aiming to make the explanation clear and accessible to a 
 general audience. If you think its necessary use given context as well to answer the questions. If you don't know 
 anything just say I don't know. Also end your answer with a caution message saying that your answers may not be 
-fully accurate. Given the following conversation and a follow up question, rephrase the follow up question to be a 
-standalone question, in its original language.
+fully accurate. Here are the details:
 
 Chat History:
 {chat_history}
@@ -76,8 +75,9 @@ Follow Up Input: {question}
 Standalone question:"""
 CONDENSE_QUESTION_PROMPT = PromptTemplate.from_template(_TEMPLATE)
 
-ANSWER_TEMPLATE = """
-Context:{context}
+ANSWER_TEMPLATE = """Answer the question based only on the following context:
+{context}
+
 Question: {question}
 """
 ANSWER_PROMPT = ChatPromptTemplate.from_template(ANSWER_TEMPLATE)
