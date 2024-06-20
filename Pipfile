@@ -15,6 +15,7 @@ fastapi = "*"
 websockets = "*"
 llama-cpp-python = "*"
 langserve = {extras = ["server"], version = "*"}
+more-itertools = "*"
 
 [dev-packages]
 black = "*"

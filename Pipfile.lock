@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "4fe2027f22de5540f563c87d3194364010e7c00a250af3d2fdfc01a81bb271c5"
+            "sha256": "d2e68eec5151e27c9bda90b7330acb1f5f62f08c625be3029011fc86854a86dc"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -649,11 +649,11 @@
         },
         "langsmith": {
             "hashes": [
-                "sha256:87bc5d9072bfcb6392d7552cbcd6089dcc1faed36d688b1587d80bd48a1acba2",
-                "sha256:d9112d2e9298ec6b02d3b1afec6ed557df9db3746c79d34ef3b448fc18e116cd"
+                "sha256:c7f2c23981917713b5515b773f37c84ff68a7adf803476e2ebb5adcb36a04202",
+                "sha256:d215718cfdcdf4a011126b7a3d4a37eee96d887e59ac1e628a57e24b2bfa3163"
             ],
             "markers": "python_version < '4.0' and python_full_version >= '3.8.1'",
-            "version": "==0.1.78"
+            "version": "==0.1.79"
         },
         "llama-cpp-python": {
             "hashes": [
@@ -763,6 +763,15 @@
             ],
             "markers": "platform_system == 'Windows'",
             "version": "==2021.4.0"
+        },
+        "more-itertools": {
+            "hashes": [
+                "sha256:e5d93ef411224fbcef366a6e8ddc4c5781bc6359d43412a65dd5964e46111463",
+                "sha256:ea6a02e24a9161e51faad17a8782b92a0df82c12c1c8886fec7f0c3fa1a1b320"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.8'",
+            "version": "==10.3.0"
         },
         "mpmath": {
             "hashes": [
@@ -922,7 +931,7 @@
                 "sha256:f870204a840a60da0b12273ef34f7051e98c3b5961b61b0c2c1be6dfd64fbcd3",
                 "sha256:ffa75af20b44f8dba823498024771d5ac50620e6915abac414251bd971b4529f"
             ],
-            "markers": "python_version >= '3.9'",
+            "markers": "python_version >= '3.12'",
             "version": "==1.26.4"
         },
         "orjson": {

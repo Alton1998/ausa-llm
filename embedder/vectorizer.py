@@ -1,5 +1,6 @@
 import logging
 import os
+import pickle
 
 from dotenv import load_dotenv
 from langchain_community.document_loaders import PyPDFLoader
@@ -56,7 +57,9 @@ for current_path, folders, files in os.walk(DIR):
 text_splitter = RecursiveCharacterTextSplitter(
     chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP
 )
-embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)
+f = open(os.getenv("EMBEDDING_MODEL_PATH","./embedder"),"rb")
+embeddings = pickle.load(f)
+f.close()
 
 for batch_no, batch in enumerate(chunked(data, BATCH_SIZE)):
     logging.info(f"Processing Batch Number:{batch_no}")
