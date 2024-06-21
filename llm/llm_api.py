@@ -44,7 +44,7 @@ LLM_MODEL_MAX_TOKENS = int(os.getenv("LLM_MODEL_MAX_TOKENS", 2000))
 LLM_MODEL_TOP_P = float(os.getenv("LLM_MODEL_TOP_P", 1))
 
 
-f = open(os.getenv("EMBEDDING_MODEL_PATH","./embedder"),"rb")
+f = open(os.getenv("EMBEDDING_MODEL_PATH", "./embedder"), "rb")
 embeddings = pickle.load(f)
 f.close()
 

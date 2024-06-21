@@ -11,6 +11,7 @@ pip install langchain openai faiss-cpu tiktoken
 import pickle
 from operator import itemgetter
 from typing import List, Tuple
+from llm_tools import __USER_COLLECTION
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
@@ -56,7 +57,7 @@ logging.basicConfig(
     level=logging_level,
 )
 
-f = open(os.getenv("EMBEDDING_MODEL_PATH","./embedder"),"rb")
+f = open(os.getenv("EMBEDDING_MODEL_PATH", "./embedder"), "rb")
 embeddings = pickle.load(f)
 f.close()
 
@@ -145,9 +146,7 @@ class ChatHistory(BaseModel):
     question: str
 
 
-conversational_qa_chain = (
-    _inputs | _context | ANSWER_PROMPT | llm | StrOutputParser()
-)
+conversational_qa_chain = _inputs | _context | ANSWER_PROMPT | llm | StrOutputParser()
 chain = conversational_qa_chain.with_types(input_type=ChatHistory)
 
 app = FastAPI(

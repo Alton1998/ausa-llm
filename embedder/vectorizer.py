@@ -57,7 +57,7 @@ for current_path, folders, files in os.walk(DIR):
 text_splitter = RecursiveCharacterTextSplitter(
     chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP
 )
-f = open(os.getenv("EMBEDDING_MODEL_PATH","./embedder"),"rb")
+f = open(os.getenv("EMBEDDING_MODEL_PATH", "./embedder"), "rb")
 embeddings = pickle.load(f)
 f.close()
 
