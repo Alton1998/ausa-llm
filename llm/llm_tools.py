@@ -1,5 +1,5 @@
 import os
-from typing import Any, Optional
+from typing import Any, Optional, Type
 
 import pymongo
 from langchain_core.pydantic_v1 import BaseModel, Field
@@ -20,7 +20,9 @@ class GetPatientVitalsWithName(BaseModel):
 
 class GetPatientVitalsWithUserNameTool(BaseTool):
     name:str = "GetPatientVitalsWithUserNameTool"
-    description =
+    description:str = "Provided with the patient name and the number of encounters"
+    args_schema: Type[BaseModel] = GetPatientVitalsWithName
+    return_direct: bool = True
     __client:MongoClient = None
     __USER_COLLECTION = "users"
     __ENCOUNTER_COLLECTION = "encounters"
