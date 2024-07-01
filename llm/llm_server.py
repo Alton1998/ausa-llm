@@ -214,15 +214,13 @@ Medical Information:
     Flol
     Estralinid
 
-Your Response Should be:
+Response:
 
 The last encounter took place on 11/05/2005, 22:23:22
-and the doctors comments were "Fluticasone, a daily inhaled steroid, is prescribed to manage chronic asthma. Follow inhaler instructions carefully." along with this the patient was also prescribed
-with Methalfateride, Flol and Estralinid,
+and the doctors comments were "Fluticasone, a daily inhaled steroid, is prescribed to manage chronic asthma. Follow inhaler instructions carefully". Along with this the patient was also prescribed
+with Methalfateride, Flol and Estralinid, and the BP was 164/76 which was rather abnormal, SPO2(blood oxygen saturattion) was also abnormal given it was 84, Heart rate was 118 BPM and seems slightly elevated.
 
-BP was 164/76 which was rather abnormal, SPO2(blood oxygen saturattion) was also abnormal given it was 84, Heart rate was 118 BPM and seems slightly elevated.
-
-Use this example as a reference for all your summaries making sure to use the medical information provided. If no medical information is provided simply respond no medical information is provided
+Use this example as a reference for all your summaries making sure to use the medical information provided. The response should not be exactly like the example but like the example and should be modified with the provided medical information. If no medical information is provided simply respond no medical information is provided
 
 Medical Information:
 {medical_information}
