@@ -151,7 +151,10 @@ def extract_action(model_output: str):
         response["arguements"] = argument_match.group(0).split(":")[1]
     return response
 
-CAMEL_CASE_PATTERN = r'[A-Z][a-z]*'
+
+CAMEL_CASE_PATTERN = r"[A-Z][a-z]*"
+
+
 def take_action(action_body):
     tool = action_body["tool"]
     patient_history = ""
@@ -163,16 +166,18 @@ def take_action(action_body):
         action_body["arguements"] = action_body["arguements"].replace("]", "")
         name, encounter = action_body["arguements"].split(",")
         encounter = encounter.replace("'", "")
-        name = name.replace("'","")
+        name = name.replace("'", "")
         new_name = ""
-        for match in re.finditer(CAMEL_CASE_PATTERN,name):
+        for match in re.finditer(CAMEL_CASE_PATTERN, name):
             new_name = new_name + match.group() + " "
         new_name = new_name.strip()
         print(encounter)
         print(new_name)
-        patient_history = GetPatientVitalsWithUserNameTool().invoke(
-            {"user_name": new_name, "num_encounters": int(encounter)}
-        ).replace("_","")
+        patient_history = (
+            GetPatientVitalsWithUserNameTool()
+            .invoke({"user_name": new_name, "num_encounters": int(encounter)})
+            .replace("_", "")
+        )
     print(patient_history)
     return {"medical_information": patient_history}
 
@@ -204,7 +209,7 @@ Medical Information:
     2)temperature(Celsius):89
     3)SPO2:84
     4)HR:118
-    Comments:Fluticasone, a daily inhaled steroid, is prescribed to manage chronic asthma. Follow inhaler instructions carefully.   
+    Comments:Fluticasone, a daily inhaled steroid, is prescribed to manage chronic asthma. Follow inhaler instructions carefully.
     Prescription:Methalfateride
     Flol
     Estralinid
@@ -212,8 +217,8 @@ Medical Information:
 Your Response Should be:
 
 The last encounter took place on 11/05/2005, 22:23:22
-and the doctors comments were "Fluticasone, a daily inhaled steroid, is prescribed to manage chronic asthma. Follow inhaler instructions carefully." along with this the patient was also prescribed 
-with Methalfateride, Flol and Estralinid, 
+and the doctors comments were "Fluticasone, a daily inhaled steroid, is prescribed to manage chronic asthma. Follow inhaler instructions carefully." along with this the patient was also prescribed
+with Methalfateride, Flol and Estralinid,
 
 BP was 164/76 which was rather abnormal, SPO2(blood oxygen saturattion) was also abnormal given it was 84, Heart rate was 118 BPM and seems slightly elevated.
 

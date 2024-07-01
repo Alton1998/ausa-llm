@@ -26,12 +26,10 @@ from dotenv import load_dotenv
 # argument_pattern = r"[']arguments[']:\[(\w|,|')*\]"
 
 
-
 import re
-pattern = r'[A-Z][a-z]*'
+
+pattern = r"[A-Z][a-z]*"
 name_string = "GraceEvans"
 match = re.finditer(pattern, name_string)
 for mat in match:
     print(mat.group())
-
-
