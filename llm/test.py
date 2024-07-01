@@ -19,12 +19,19 @@ from dotenv import load_dotenv
 #
 # print(users)
 # print(users_count)
+# import re
+#
+# tool_pattern = r"[']tool[']:[']([a-z]|[A-Z])*[']"
+# json_string = "{'tool':'GetPatientEncounterDetailsTool','arguments':['Mathew','10']}"
+# argument_pattern = r"[']arguments[']:\[(\w|,|')*\]"
+
+
+
 import re
+pattern = r'[A-Z][a-z]*'
+name_string = "GraceEvans"
+match = re.finditer(pattern, name_string)
+for mat in match:
+    print(mat.group())
 
-tool_pattern = r"[']tool[']:[']([a-z]|[A-Z])*[']"
-json_string = "{'tool':'GetPatientEncounterDetailsTool','arguments':['Mathew','10']}"
-argument_pattern = r"[']arguments[']:\[(\w|,|')*\]"
-match = re.search(argument_pattern, json_string)
 
-if match:
-    match.group(0).split()

@@ -151,21 +151,29 @@ def extract_action(model_output: str):
         response["arguements"] = argument_match.group(0).split(":")[1]
     return response
 
-
+CAMEL_CASE_PATTERN = r'[A-Z][a-z]*'
 def take_action(action_body):
     tool = action_body["tool"]
     patient_history = ""
     if tool is None:
         patient_history = "No patient Information available"
-    if "GetPatientVitalsWithUserNameTool" in tool:
+    elif "GetPatientVitalsWithUserNameTool" in tool:
         action_body["arguements"] = action_body["arguements"].replace('"', "")
         action_body["arguements"] = action_body["arguements"].replace("[", "")
         action_body["arguements"] = action_body["arguements"].replace("]", "")
         name, encounter = action_body["arguements"].split(",")
         encounter = encounter.replace("'", "")
+        name = name.replace("'","")
+        new_name = ""
+        for match in re.finditer(CAMEL_CASE_PATTERN,name):
+            new_name = new_name + match.group() + " "
+        new_name = new_name.strip()
+        print(encounter)
+        print(new_name)
         patient_history = GetPatientVitalsWithUserNameTool().invoke(
-            {"user_name": name, "num_encounters": int(encounter)}
-        )
+            {"user_name": new_name, "num_encounters": int(encounter)}
+        ).replace("_","")
+    print(patient_history)
     return {"medical_information": patient_history}
 
 
@@ -173,6 +181,44 @@ SUMMARIZE_MEDICAL_DOCS_PROMPT_TEMPLATE = """
 You are an expert and experienced from the healthcare and biomedical domain with extensive medical
 knowledge and practical experience. Your name is Stephen, and you were developed by AUSA. In the following you are going to be given the medical history for a patient.
 To the best of your knowledge summarize the information provided, highlighting any problems with the vitals and any corrective action that you might think is necessary.
+Example 1:
+Medical Information:
+    Encounter ID:60321dc142c92e62219e17d073689bd8
+    Date:11/05/2005, 22:23:22
+    Vitals:
+    0)systolic_bp:164
+    1)diastolic_bp:76
+    2)temperature(Celsius):89
+    3)SPO2:84
+    4)HR:118
+    Comments:Fluticasone, a daily inhaled steroid, is prescribed to manage chronic asthma. Follow inhaler instructions carefully.
+    Prescription:Methalfateride
+    Flol
+    Estralinid
+
+    Encounter ID:60321dc142c92e62219e17d073689bd8
+    Date:11/05/2005, 22:23:22
+    Vitals:
+    0)systolic_bp:164
+    1)diastolic_bp:76
+    2)temperature(Celsius):89
+    3)SPO2:84
+    4)HR:118
+    Comments:Fluticasone, a daily inhaled steroid, is prescribed to manage chronic asthma. Follow inhaler instructions carefully.   
+    Prescription:Methalfateride
+    Flol
+    Estralinid
+
+Your Response Should be:
+
+The last encounter took place on 11/05/2005, 22:23:22
+and the doctors comments were "Fluticasone, a daily inhaled steroid, is prescribed to manage chronic asthma. Follow inhaler instructions carefully." along with this the patient was also prescribed 
+with Methalfateride, Flol and Estralinid, 
+
+BP was 164/76 which was rather abnormal, SPO2(blood oxygen saturattion) was also abnormal given it was 84, Heart rate was 118 BPM and seems slightly elevated.
+
+Use this example as a reference for all your summaries making sure to use the medical information provided. If no medical information is provided simply respond no medical information is provided
+
 Medical Information:
 {medical_information}
 """
@@ -207,7 +253,7 @@ app = FastAPI(
 add_routes(app, chain, enable_feedback_endpoint=True, path="/general_info")
 add_routes(
     app,
-    fetch_user_details_chain,
+    fetch_user_details_chain.with_types(input_type=LLMInput),
     enable_feedback_endpoint=True,
     path="/summarize_user_reports",
 )
