@@ -16,6 +16,7 @@ websockets = "*"
 llama-cpp-python = "*"
 langserve = {extras = ["server"], version = "*"}
 more-itertools = "*"
+langchainhub = "*"
 
 [dev-packages]
 black = "*"
