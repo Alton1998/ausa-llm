@@ -69,7 +69,7 @@ docker build -f docker_scripts/embedder/Dockerfile -t document_embedder:latest .
 ```
 ## LLM
 ```
-docker build -f docker_scripts/llm/Dockerfile -t llm:latest-3 .    
+docker build -f docker_scripts/llm_gpu/Dockerfile -t cyberhead1998/llm:gpu . --push
 ```
 ## References
 

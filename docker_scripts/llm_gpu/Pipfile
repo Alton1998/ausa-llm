@@ -23,8 +23,6 @@ black = "*"
 flake8 = "*"
 bandit = "*"
 pre-commit = "*"
-autoflake = "*"
 
 [requires]
 python_version = "3.12"
-python_full_version = "3.12.3"

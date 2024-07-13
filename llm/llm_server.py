@@ -21,7 +21,7 @@ import os
 
 from langserve import add_routes
 from langserve.pydantic_v1 import BaseModel, Field
-from llm_tools import GetPatientVitalsWithUserNameTool
+from llm.llm_tools import GetPatientVitalsWithUserNameTool
 
 load_dotenv()
 
@@ -90,6 +90,7 @@ llm = LlamaCpp(
     max_tokens=LLM_MODEL_MAX_TOKENS,
     top_p=LLM_MODEL_TOP_P,
     n_ctx=2048,
+    n_gpu_layers=-1
 )
 
 
@@ -220,7 +221,7 @@ The last encounter took place on 11/05/2005, 22:23:22
 and the doctors comments were "Fluticasone, a daily inhaled steroid, is prescribed to manage chronic asthma. Follow inhaler instructions carefully". Along with this the patient was also prescribed
 with Methalfateride, Flol and Estralinid, and the BP was 164/76 which was rather abnormal, SPO2(blood oxygen saturattion) was also abnormal given it was 84, Heart rate was 118 BPM and seems slightly elevated.
 
-Use this example as a reference for all your summaries making sure to use the medical information provided. The response should not be exactly like the example but like the example and should be modified with the provided medical information. If no medical information is provided simply respond no medical information is provided
+Use this example as a reference for all your summaries making sure to use the medical information provided. The response should not be exactly like the example but like the example and should be modified with the provided medical information. If no medical information is provided simply respond no medical information is provided.
 
 Medical Information:
 {medical_information}
