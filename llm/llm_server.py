@@ -90,7 +90,7 @@ llm = LlamaCpp(
     max_tokens=LLM_MODEL_MAX_TOKENS,
     top_p=LLM_MODEL_TOP_P,
     n_ctx=2048,
-    n_gpu_layers=-1
+    n_gpu_layers=-1,
 )
 
 

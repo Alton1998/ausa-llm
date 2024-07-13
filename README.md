@@ -74,3 +74,4 @@ docker build -f docker_scripts/llm_gpu/Dockerfile -t cyberhead1998/llm:gpu . --p
 ## References
 
 - https://arxiv.org/pdf/2401.08406
+- https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
