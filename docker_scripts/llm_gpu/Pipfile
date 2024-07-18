@@ -13,10 +13,17 @@ langchain-community = "*"
 sentence-transformers = "*"
 fastapi = "*"
 websockets = "*"
-llama-cpp-python = "*"
+cmake = "*"
+scikit-build = "*"
+setuptools = "*"
+uvicorn = "*"
+sse-starlette = "*"
+pydantic-settings = "*"
+starlette-context = "*"
 langserve = {extras = ["server"], version = "*"}
 more-itertools = "*"
 langchainhub = "*"
+llama-cpp-python = "*"
 
 [dev-packages]
 black = "*"
@@ -25,4 +32,4 @@ bandit = "*"
 pre-commit = "*"
 
 [requires]
-python_version = "3.12"
+python_version = "3.10"

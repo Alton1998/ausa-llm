@@ -1,6 +1,6 @@
 services:
   llm:
-    image: cyberhead1998/llm:buildx-latest-6
+    image: cyberhead1998/llm:gpu-1
     ports:
       - "8000:8000"
     environment:
@@ -19,3 +19,10 @@ services:
       LLM_MODEL_MAX_TOKENS: 2000
       LOG_LEVEL: DEBUG
       EMBEDDING_MODEL_PATH: /code/llm/embedder
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [ gpu ]

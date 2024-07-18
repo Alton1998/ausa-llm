@@ -13,10 +13,10 @@ langchain-community = "*"
 sentence-transformers = "*"
 fastapi = "*"
 websockets = "*"
-llama-cpp-python = "*"
 langserve = {extras = ["server"], version = "*"}
 more-itertools = "*"
 langchainhub = "*"
+llama-cpp-python = "*"
 
 [dev-packages]
 black = "*"
