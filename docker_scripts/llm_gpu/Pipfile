@@ -11,7 +11,7 @@ pymongo = "*"
 tiktoken = "*"
 langchain-community = "*"
 sentence-transformers = "*"
-fastapi = "*"
+fastapi = {extras = ["standard"], version = "*"}
 websockets = "*"
 cmake = "*"
 scikit-build = "*"

@@ -40,6 +40,8 @@ else:
 MONGO_URI = os.getenv("MONGODB_ATLAS_CLUSTER_URI")
 DB_NAME = os.getenv("MONGODB_NAME")
 COLLECTION_NAME = os.getenv("MONGODB_COLLECTION_NAME")
+PATIENT_KNOWLEDGE_COLLECTION = os.getenv("PATIENT_KNOWLEDGE_COLLECTION")
+PATIENT_INFO_INDEX_NAME = os.getenv("PATIENT_INFO_INDEX_NAME")
 ATLAS_VECTOR_SEARCH_INDEX_NAME = os.getenv("VECTOR_SEARCH_INDEX", "medical_info_index")
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "thenlper/gte-large")
 LLM_MODEL_TEMPERATURE = float(os.getenv("LLM_MODEL_TEMPERATURE", 1.0))
@@ -82,7 +84,15 @@ vectorstore = MongoDBAtlasVectorSearch.from_connection_string(
     index_name=ATLAS_VECTOR_SEARCH_INDEX_NAME,
 )
 
+patient_knowledge_base_vector_store = MongoDBAtlasVectorSearch.from_connection_string(
+    MONGO_URI,
+    DB_NAME + "." + PATIENT_KNOWLEDGE_COLLECTION,
+    embeddings,
+    index_name=PATIENT_INFO_INDEX_NAME,
+)
+
 retriever = vectorstore.as_retriever()
+patient_kb_retriever = patient_knowledge_base_vector_store.as_retriever()
 
 llm = LlamaCpp(
     model_path=LLM_MODEL_PATH,
@@ -116,7 +126,6 @@ conversational_qa_chain = (
     | llm
     | StrOutputParser()
 )
-
 
 chain = conversational_qa_chain.with_types(input_type=LLMInput)
 
@@ -172,14 +181,11 @@ def take_action(action_body):
         for match in re.finditer(CAMEL_CASE_PATTERN, name):
             new_name = new_name + match.group() + " "
         new_name = new_name.strip()
-        print(encounter)
-        print(new_name)
         patient_history = (
             GetPatientVitalsWithUserNameTool()
             .invoke({"user_name": new_name, "num_encounters": int(encounter)})
             .replace("_", "")
         )
-    print(patient_history)
     return {"medical_information": patient_history}
 
 
@@ -231,6 +237,61 @@ SUMMARIZE_MEDICAL_DOCS_PROMPT = PromptTemplate.from_template(
     SUMMARIZE_MEDICAL_DOCS_PROMPT_TEMPLATE
 )
 
+GENERAL_TASK_PROMPT_TEMPLATE = """
+
+Based on the below context answer the users questions:
+{context}
+User's Question:
+{users_question}
+
+In your response summarize the context received and answer the users question.
+"""
+
+PATIENT_TASK_PROMPT_TEMPLATE = """
+
+You are given some patients medical histories use them to answer the user's query.
+
+For Example the user's query would look something like this:
+Summarize patient history for Patty Johnson
+
+The patient histories that you will be given will look something like:
+
+The patients name is Patty Johnson. The patients age is 41. During this medical encounter which can \n    be identified with the encounter identification number d8714cfe678a2c81fee16c64e70742b0 which took place on August 5th, 2013 01:27 UTC.\n    The vitals observed for the patient are as follows :\n    0)systolic_bp:180\n1)diastolic_bp:89\n2)temperature(Celsius):94\n3)SPO2:96\n4)HR:115\n\n    \n    Where systolic_bp stands for "Systolic Blood Pressure", similarly diastolic_bp stands for "Diastolic Blood \n    Pressure" and SPO2 stands for "blood oxygen saturation levels in percentage" and HR stands for "heart rate". \n    \n    For this Encounter the doctors comments where as follows:\n    \n    Triamcinolone cream applied twice daily to affected eczema areas will reduce inflammation and itching..\n    \n    Additionally the doctor also prescribed the following:\n    \n    Difil\nLope\nRoxia-Duranupra-1a
+Your Response should ideally be:
+The patients name is Patty Johnson. The patients age is 41. During this medical encounter which can \n    be identified with the encounter identification number d8714cfe678a2c81fee16c64e70742b0 which took place on August 5th, 2013 01:27 UTC.\n    The vitals observed for the patient are as follows :\n    0)systolic_bp:180\n1)diastolic_bp:89\n2)temperature(Celsius):94\n3)SPO2:96\n4)HR:115\n\n    \n    Where systolic_bp stands for "Systolic Blood Pressure", similarly diastolic_bp stands for "Diastolic Blood \n    Pressure" and SPO2 stands for "blood oxygen saturation levels in percentage" and HR stands for "heart rate". \n    \n    For this Encounter the doctors comments where as follows:\n    \n    Triamcinolone cream applied twice daily to affected eczema areas will reduce inflammation and itching..\n    \n    Additionally the doctor also prescribed the following:\n    \n    Difil\nLope\nRoxia-Duranupra-1a\n\n
+
+
+User's Query:
+{users_question}
+Patients Histories:
+{context}
+
+"""
+
+PATIENT_TASK_PROMPT = PromptTemplate.from_template(PATIENT_TASK_PROMPT_TEMPLATE)
+GENERAL_TASK_PROMPT = PromptTemplate.from_template(GENERAL_TASK_PROMPT_TEMPLATE)
+
+
+def document_retriever(payload):
+    if payload["query"].startswith("[AUSA QUERY]:"):
+        payload["retriever"] = patient_kb_retriever
+        payload["patient_task"] = True
+    else:
+        payload["retriever"] = retriever
+        payload["patient_task"] = False
+    payload["query"] = payload["query"].replace("[AUSA QUERY]:", "")
+
+    return payload
+
+
+def fetch_context_information(payload):
+    chosen_retriever = payload["retriever"]
+    query = payload["query"]
+    docs = chosen_retriever.invoke(query)
+    payload["docs"] = format_docs(docs)
+    print(payload)
+    return payload
+
 
 fetch_user_details_chain = (
     RunnableMap(
@@ -242,6 +303,27 @@ fetch_user_details_chain = (
     | take_action
     | SUMMARIZE_MEDICAL_DOCS_PROMPT
     | llm
+    | StrOutputParser()
+)
+
+
+def determine_prompt(payload):
+    formatted_payload = dict()
+    formatted_payload["users_question"] = payload["query"]
+    formatted_payload["context"] = payload["docs"]
+    if not payload["patient_task"]:
+        print("came here")
+        return llm.invoke(GENERAL_TASK_PROMPT.invoke(formatted_payload))
+    else:
+        print("nope Came here")
+        return payload["docs"]
+
+
+ausa_universal_ai_chat_bot_chain = (
+    RunnableMap(query=itemgetter("question"))
+    | document_retriever
+    | fetch_context_information
+    | determine_prompt
     | StrOutputParser()
 )
 
@@ -260,6 +342,12 @@ add_routes(
     fetch_user_details_chain.with_types(input_type=LLMInput),
     enable_feedback_endpoint=True,
     path="/summarize_user_reports",
+)
+add_routes(
+    app,
+    ausa_universal_ai_chat_bot_chain.with_types(input_type=LLMInput),
+    enable_feedback_endpoint=True,
+    path="/v2",
 )
 
 if __name__ == "__main__":

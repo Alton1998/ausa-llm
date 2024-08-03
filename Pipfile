@@ -11,12 +11,12 @@ pymongo = "*"
 tiktoken = "*"
 langchain-community = "*"
 sentence-transformers = "*"
-fastapi = "*"
 websockets = "*"
-langserve = {extras = ["server"], version = "*"}
+langserve = {extras = ["server"] }
 more-itertools = "*"
 langchainhub = "*"
 llama-cpp-python = "*"
+fastapi = {extras = ["standard"], version = "*"}
 
 [dev-packages]
 black = "*"
@@ -24,6 +24,7 @@ flake8 = "*"
 bandit = "*"
 pre-commit = "*"
 autoflake = "*"
+fpdf = "*"
 
 [requires]
 python_version = "3.12"

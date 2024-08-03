@@ -65,6 +65,7 @@ for batch_no, batch in enumerate(chunked(data, BATCH_SIZE)):
     logging.info(f"Processing Batch Number:{batch_no}")
     logging.debug(f"Batch contains the following files:{batch}")
     docs = text_splitter.split_documents(batch)
+    print(docs)
     vector_search = MongoDBAtlasVectorSearch.from_documents(
         documents=docs,
         embedding=embeddings,
