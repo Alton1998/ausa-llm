@@ -1,26 +1,21 @@
+import logging
+import os
 import pickle
 import re
 from operator import itemgetter
-from typing import List, Tuple
-import json
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
-from langchain import hub
+from fastapi.middleware.cors import CORSMiddleware
+from langchain.tools.render import render_text_description
 from langchain_community.llms.llamacpp import LlamaCpp
 from langchain_community.vectorstores import MongoDBAtlasVectorSearch
-from langchain_core.messages import HumanMessage, AIMessage, ToolMessage
-from langchain_core.output_parsers import StrOutputParser, JsonOutputParser
-from langchain_core.prompts import ChatPromptTemplate, PromptTemplate, format_document
-from langchain_core.runnables import RunnableMap, RunnablePassthrough
-from langchain.tools.render import render_text_description
-from langchain.agents import create_structured_chat_agent, AgentExecutor
-
-import logging
-import os
-
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import PromptTemplate
+from langchain_core.runnables import RunnableMap
 from langserve import add_routes
-from langserve.pydantic_v1 import BaseModel, Field
+from langserve.pydantic_v1 import BaseModel
+
 from llm.llm_tools import GetPatientVitalsWithUserNameTool
 
 load_dotenv()
@@ -331,6 +326,16 @@ app = FastAPI(
     title="Ausa LLM",
     version="1.0",
     description="Ausa AI Co-pilot Service",
+)
+
+origins = ['*']
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 # Adds routes to the app for using the chain under:
 # /invoke
